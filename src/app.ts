@@ -1,17 +1,19 @@
 import express, { Application, Request, Response, NextFunction } from "express";
-import { json, urlencoded } from "body-parser";
 import morgan from "morgan";
 
 import { attachSendJson } from "./middlewares/response";
 import { asyncHandler } from "./utils/asyncHandler";
-import { errorHandler } from "./utils/errorHandler";
+import { errorConverter } from "./utils/errorConverter";
 import sequelize from "./config/db";
+import router from "./routes/index.routes";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./docs/swagger.json";
 
 const app: Application = express();
 
 // Middleware
-app.use(json());
-app.use(urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Logger
 app.use(morgan("dev"));
@@ -25,12 +27,18 @@ app.get("/health", asyncHandler(async (req: Request, res: Response, next: NextFu
     res.sendJson(200, "Okay")
 }));
 
+// Mount all the routes
+app.use('/api', router);
+
+// Swagger API
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 // Not Found Error
 app.use((req: Request, res: Response, next: NextFunction) => {
     res.sendJson(404, "Not Found.")
 })
 
-// Error handler
-app.use(errorHandler);
+// Error converter (must be before error handler)
+app.use(errorConverter);
 
 export default app;

@@ -19,7 +19,7 @@ export function errorHandler(err: APIError, req: Request, res: Response, next: N
     console.error("Error message:", err.message);
     console.error("Stack:", err.stack);
     console.error("Errors:", err.errors);
-    return next(err);
+    return res.sendJson(err.status, message, err.data);
   }
 
   if (err.stack) console.error(err.stack);

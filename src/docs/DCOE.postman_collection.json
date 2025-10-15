@@ -1,0 +1,259 @@
+{
+	"info": {
+		"_postman_id": "de9ef747-daf8-459e-975f-6fe1276fbd42",
+		"name": "DCOE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49214955",
+		"_collection_link": "https://asifulshaikh1306-8413861.postman.co/workspace/Asiful-Sk's-Workspace~32e97f76-6fb8-4aa8-89bc-7e5b64c1505f/collection/49214955-de9ef747-daf8-459e-975f-6fe1276fbd42?action=share&source=collection_link&creator=49214955"
+	},
+	"item": [
+		{
+			"name": "Cases",
+			"item": [
+				{
+					"name": "Get Case",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwiaWF0IjoxNzYwNTI4Mzk4LCJleHAiOjE3NjA1MzE5OTh9.iirnLhGPk0OPy19lpHeq282cJWwJnbqfpYzKcxvCEyw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/VA-1318/Desktop/dummy.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host-local}}/api/cases?assigned_to=5",
+							"host": [
+								"{{host-local}}"
+							],
+							"path": [
+								"api",
+								"cases"
+							],
+							"query": [
+								{
+									"key": "assigned_to",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Case Injestion",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwiaWF0IjoxNzYwNTMwMjg4LCJleHAiOjE3NjA1MzM4ODh9.LjJsqMigoNjw87G17481IimDmlckdI--7tfwKkOJg5s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/VA-1318/Desktop/dummy.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host-local}}/api/cases/upload",
+							"host": [
+								"{{host-local}}"
+							],
+							"path": [
+								"api",
+								"cases",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Case Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwiaWF0IjoxNzYwNTI4Mzk4LCJleHAiOjE3NjA1MzE5OTh9.iirnLhGPk0OPy19lpHeq282cJWwJnbqfpYzKcxvCEyw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"Escalated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host-local}}/api/case/1/update-status",
+							"host": [
+								"{{host-local}}"
+							],
+							"path": [
+								"api",
+								"case",
+								"1",
+								"update-status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@example.com\",\r\n    \"password\": \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host-local}}/api/auth/login",
+							"host": [
+								"{{host-local}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Assign Engine",
+			"item": [
+				{
+					"name": "Assign Cases",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwiaWF0IjoxNzYwNTMwMjg4LCJleHAiOjE3NjA1MzM4ODh9.LjJsqMigoNjw87G17481IimDmlckdI--7tfwKkOJg5s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-local}}/api/assign/run",
+							"host": [
+								"{{host-local}}"
+							],
+							"path": [
+								"api",
+								"assign",
+								"run"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Analytics",
+			"item": [
+				{
+					"name": "Analytic Summary",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwiaWF0IjoxNzYwNTMyMjY1LCJleHAiOjE3NjA1MzU4NjV9.DFS8ZLreuHteA9expjCK2Pv3_K63r7x4aFOjlck0L6E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-local}}/api/analytics/summary",
+							"host": [
+								"{{host-local}}"
+							],
+							"path": [
+								"api",
+								"analytics",
+								"summary"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host-local}}/health",
+					"host": [
+						"{{host-local}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

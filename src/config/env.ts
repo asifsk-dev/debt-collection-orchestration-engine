@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // List required env vars and export them directly
-const requiredEnv = ['PORT', 'NODE_ENV', 'DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASS', 'DB_NAME'] as const;
+const requiredEnv = ['PORT', 'NODE_ENV', 'DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASS', 'DB_NAME', 'JWT_SECRET'] as const;
 
 type EnvKey = (typeof requiredEnv)[number];
 
@@ -14,4 +14,4 @@ for (const key of requiredEnv) {
     env[key] = value;
 }
 
-export const { PORT, NODE_ENV, DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME } = env;
+export const { PORT, NODE_ENV, DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME, JWT_SECRET } = env;

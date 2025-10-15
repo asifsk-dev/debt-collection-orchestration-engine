@@ -12,8 +12,10 @@ import { PORT } from "./config/env";
 		// Start server
 		app.listen(PORT, () => {
 			console.log(`Server running on http://localhost:${PORT}`);
+			console.log(`Swagger docs available at  http://localhost:${PORT}/api-docs`);
+
 		});
-		
+
 	} catch (err) {
 		console.error("Unable to connect to the database:", err);
 		process.exit(1);

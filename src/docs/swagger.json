@@ -1,0 +1,327 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Debt Collection Orchestration API",
+    "version": "1.0.0",
+    "description": "API for uploading, assigning, and tracking debt collection cases."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001/api",
+      "description": "Local server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "call_center_agent",
+              "field_agent",
+              "legal_team"
+            ]
+          }
+        }
+      },
+      "CaseRaw": {
+        "type": "object",
+        "properties": {
+          "case_id": {
+            "type": "string"
+          },
+          "bank_code": {
+            "type": "string"
+          },
+          "borrower_name": {
+            "type": "string"
+          },
+          "loan_amount": {
+            "type": "number"
+          },
+          "due_amount": {
+            "type": "number"
+          },
+          "days_past_due": {
+            "type": "integer"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          }
+        }
+      },
+      "CaseProcessed": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CaseRaw"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "assigned_to": {
+                "type": "integer"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "Pending",
+                  "In Progress",
+                  "Resolved",
+                  "Escalated"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "CaseAssignment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "case_id": {
+            "type": "integer"
+          },
+          "assigned_to": {
+            "type": "integer"
+          },
+          "assigned_by": {
+            "type": "integer"
+          }
+        }
+      },
+      "AnalyticsSummary": {
+        "type": "object",
+        "properties": {
+          "total_cases_by_status": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "avg_resolution_time_days": {
+            "type": "number"
+          },
+          "case_count_per_team": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "assigned_to": {
+                  "type": "integer"
+                },
+                "case_count": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "total_due_amount_recovered": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "summary": "Login & return JWT",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful"
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/cases/upload": {
+      "post": {
+        "summary": "Upload JSON or CSV cases",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CaseRaw"
+                }
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cases uploaded successfully"
+          }
+        }
+      }
+    },
+    "/cases": {
+      "get": {
+        "summary": "Get all cases or filter by assigned_to",
+        "parameters": [
+          {
+            "name": "assigned_to",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of cases"
+          }
+        }
+      }
+    },
+    "/cases/{case_id}/update-status": {
+      "patch": {
+        "summary": "Update status of a case",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "Pending",
+                      "In Progress",
+                      "Resolved",
+                      "Escalated"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Case status updated"
+          }
+        }
+      }
+    },
+    "/cases/assign": {
+      "post": {
+        "summary": "Assign unassigned cases to agents",
+        "responses": {
+          "200": {
+            "description": "Cases assigned successfully"
+          }
+        }
+      }
+    },
+    "/analytics/summary": {
+      "get": {
+        "summary": "Return analytics summary (Admin only)",
+        "responses": {
+          "200": {
+            "description": "Analytics summary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsSummary"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    }
+  }
+}

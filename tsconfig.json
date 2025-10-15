@@ -1,5 +1,7 @@
 {
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*"
+  ],
   "compilerOptions": {
     "module": "commonjs",
     "target": "es2022",
@@ -14,6 +16,10 @@
     "declarationMap": true,
     "sourceMap": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
     "types": [
       "node"
     ]
